@@ -432,7 +432,11 @@ const Landing = ({ heroStyle, onLogin }) => {
     });
     // catch anchor-link jumps: on hashchange, reveal every fade-up the target will pass
     const onHash = () => {
-      const tgt = document.querySelector(window.location.hash);
+      const hash = window.location.hash;
+      // 빈 해시일 때 document.querySelector('') 는 SyntaxError를 throw하므로 반드시 guard 필요
+      if (!hash) return;
+      let tgt;
+      try { tgt = document.querySelector(hash); } catch { return; }
       if (!tgt) return;
       const tgtY = tgt.getBoundingClientRect().top + window.scrollY;
       document.querySelectorAll('.fade-up:not(.in)').forEach(el => {
