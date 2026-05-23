@@ -146,4 +146,4 @@ const tweaksStyles = `
 .tk-note { font-size: 10px; color: var(--fg-muted); margin: 16px 0 0; padding-top: 12px; border-top: 1px solid var(--hairline); line-height: 1.5; }
 `;
 
-export { Tweaks, TWEAK_DEFAULTS, applyTweaks };
+export { Tweaks, TWEAK_DEFAULTS, applyTweaks, tweaksStyles };
