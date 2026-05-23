@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=1440, initial-scale=1"/>
+<title>Magic Bridge — Print</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css"/>
+<link rel="stylesheet" href="src/tokens.css"/>
+<style id="runtime-styles"></style>
+
+<style>
+  /* PRINT LAYOUT — pages */
+  html, body { background: #070F22; }
+  body { margin: 0; }
+  .print-root { width: 1440px; margin: 0 auto; }
+  .print-page {
+    width: 1440px;
+    position: relative;
+    overflow: hidden;
+    background: var(--bg-0);
+    break-after: page;
+    page-break-after: always;
+    break-inside: avoid;
+  }
+  .print-page:last-child { break-after: auto; page-break-after: auto; }
+  .print-page-label {
+    position: absolute; top: 18px; left: 24px; z-index: 30;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: rgba(232, 195, 122, 0.5);
+    padding: 4px 10px;
+    border: 1px solid rgba(212, 162, 76, 0.25);
+    border-radius: 3px;
+    background: rgba(7,15,34,0.7);
+  }
+
+  /* disable animations, entrance states — everything visible */
+  *, *::before, *::after {
+    animation-duration: 0s !important;
+    animation-delay: 0s !important;
+    transition: none !important;
+  }
+  .fade-up, .ab-step { opacity: 1 !important; transform: none !important; }
+  .tk-panel { display: none !important; }
+
+  /* APP needs the sidebar but not sticky/scroll behavior */
+  .print-app .ab-app { grid-template-columns: 256px 1fr; min-height: auto; }
+  .print-app .ab-side { position: static; height: auto; }
+  .print-app .ab-main { height: auto; overflow: visible; }
+  .print-app .ab-topbar { position: static; }
+  .print-app .ls-side { position: static; }
+
+  /* landing: remove nav fixed, scroll-hint */
+  .print-landing .ab-nav { position: absolute; }
+  .print-landing .ab-scroll-hint { display: none; }
+  .print-landing .ab-hero { min-height: 900px; }
+
+  /* login page — shrink so it's one page */
+  .print-login .ab-login { min-height: 980px; }
+
+  @page {
+    size: 1440px 1900px;
+    margin: 0;
+  }
+  @media print {
+    html, body { background: #070F22 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .print-root { margin: 0; }
+    .print-page-label { display: none; }
+  }
+
+  /* Print cover */
+  .print-cover {
+    width: 1440px; height: 1900px;
+    background: radial-gradient(ellipse at 20% 10%, #12224A 0%, #0A1936 45%, #070F22 100%);
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 100px 120px;
+    position: relative; overflow: hidden;
+    color: #F5F2E8;
+    font-family: 'Pretendard Variable', 'Pretendard', 'Inter', sans-serif;
+  }
+  .print-cover-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px; letter-spacing: 0.3em; color: #E8C37A;
+  }
+  .print-cover h1 {
+    font-size: 128px; font-weight: 700; line-height: 1.0;
+    letter-spacing: -0.035em; margin: 40px 0 0;
+  }
+  .print-cover h1 .gold {
+    background: linear-gradient(180deg, #E8C37A, #D4A24C 60%, #B8893A);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .print-cover-sub {
+    font-size: 26px; line-height: 1.55; color: #C6CBD8;
+    margin-top: 60px; max-width: 900px;
+  }
+  .print-cover-bridge {
+    position: absolute; inset: 0; pointer-events: none; opacity: 0.35;
+  }
+  .print-cover-foot {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; letter-spacing: 0.2em; color: #9BA4B8;
+  }
+  .print-cover-toc {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .print-cover-toc span { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 0.18em; color: #9BA4B8; }
+  .print-cover-toc span b { color: #E8C37A; margin-right: 14px; font-weight: 400; }
+</style>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel" src="src/icons.jsx"></script>
+<script type="text/babel" src="src/hero-visuals.jsx"></script>
+<script type="text/babel" src="src/landing.css.jsx"></script>
+<script type="text/babel" src="src/app.css.jsx"></script>
+<script type="text/babel" src="src/landing.jsx"></script>
+<script type="text/babel" src="src/login.jsx"></script>
+<script type="text/babel" src="src/app.jsx"></script>
+<script type="text/babel" src="src/tweaks.jsx"></script>
+
+<script type="text/babel">
+  document.getElementById('runtime-styles').textContent =
+    (window.landingStyles || '') + '\n' + (window.appStyles || '') + '\n' + (window.tweaksStyles || '');
+  applyTweaks(TWEAK_DEFAULTS);
+
+  // Reach into the App module — we need Dashboard, Curriculum, Lesson, Resources, Community.
+  // They are not exported; re-render App and swap route manually via a forced key.
+  // Simpler path: render Landing, Login, and multiple App instances; set localStorage route before each.
+
+  const Page = ({ label, kind, children }) => (
+    <div className={`print-page print-${kind}`}>
+      <span className="print-page-label">{label}</span>
+      {children}
+    </div>
+  );
+
+  const Cover = () => (
+    <div className="print-cover">
+      <div className="print-cover-bridge" aria-hidden="true">
+        <HeroBridge className="ab-hero-svg"/>
+      </div>
+      <div style={{position:'relative'}}>
+        <p className="print-cover-eyebrow">MAGIC BRIDGE · 2026 DESIGN SYSTEM</p>
+        <h1>혼자가 아닌,<br/><span className="gold">시스템으로</span> 하는 투자.</h1>
+        <p className="print-cover-sub">
+          Magic Bridge는 수익을 약속하지 않습니다. 스스로의 투자 기준을 만들어드립니다.
+          본 문서는 랜딩 페이지와 수강생 앱의 주요 화면을 정적 형태로 담고 있습니다.
+        </p>
+      </div>
+      <div className="print-cover-foot" style={{position:'relative'}}>
+        <div className="print-cover-toc">
+          <span><b>01</b> LANDING — 설명회 페이지 (Section 1–10)</span>
+          <span><b>02</b> STUDENT SIGN-IN</span>
+          <span><b>03</b> DASHBOARD</span>
+          <span><b>04</b> CURRICULUM — 3 STAGE</span>
+          <span><b>05</b> LESSON VIEWER</span>
+          <span><b>06</b> RESOURCES · COMMUNITY</span>
+        </div>
+        <div style={{textAlign:'right'}}>
+          <span>v1.0 · PRINT EDITION</span><br/>
+          <span style={{marginTop:8, display:'inline-block'}}>2026 · KO</span>
+        </div>
+      </div>
+    </div>
+  );
+
+  // For App routes we set localStorage then mount a fresh App each time wrapped so Dashboard, etc. render.
+  const AppAt = ({ route }) => {
+    React.useLayoutEffect(() => { localStorage.setItem('ab_route', route); }, [route]);
+    // Use key to force remount for each route
+    return <App key={route} onLogout={()=>{}}/>;
+  };
+
+  function PrintRoot() {
+    return (
+      <div className="print-root">
+        <div className="print-page"><span className="print-page-label">COVER</span><Cover/></div>
+
+        <Page label="01 · LANDING" kind="landing">
+          <Landing heroStyle="bridge" onLogin={()=>{}}/>
+        </Page>
+
+        <Page label="02 · STUDENT SIGN-IN" kind="login">
+          <Login onSignIn={()=>{}} onBack={()=>{}}/>
+        </Page>
+
+        <Page label="03 · DASHBOARD" kind="app">
+          <AppAt route="dashboard"/>
+        </Page>
+
+        <Page label="04 · CURRICULUM" kind="app">
+          <AppAt route="curriculum"/>
+        </Page>
+
+        <Page label="05 · LESSON VIEWER" kind="app">
+          <AppAt route="lesson"/>
+        </Page>
+
+        <Page label="06 · RESOURCES" kind="app">
+          <AppAt route="resources"/>
+        </Page>
+
+        <Page label="07 · COMMUNITY" kind="app">
+          <AppAt route="community"/>
+        </Page>
+      </div>
+    );
+  }
+
+  // Wait for fonts + babel, then render, then auto-print after stabilization.
+  (async () => {
+    try { await document.fonts.ready; } catch(e) {}
+    ReactDOM.createRoot(document.getElementById('root')).render(<PrintRoot/>);
+    // Give React + lazy layout a moment
+    setTimeout(() => {
+      // Trigger print once. URL param ?print=1 also works manually.
+      if (new URLSearchParams(location.search).get('noprint') !== '1') {
+        window.print();
+      }
+    }, 1500);
+  })();
+</script>
+
+</body>
+</html>
