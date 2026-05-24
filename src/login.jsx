@@ -1,6 +1,6 @@
 // Magic Bridge — Login (transition screen)
 // ES Module — Vite 빌드용
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { IconArrowRight, IconWordmark } from './icons.jsx';
 import { HeroAbstract } from './hero-visuals.jsx';
 

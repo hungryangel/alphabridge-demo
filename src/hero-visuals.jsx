@@ -1,5 +1,6 @@
 // Magic Bridge — Hero visuals (3 variants, selected by tweaks)
 // ES Module — Vite 빌드용
+import React from 'react';
 const HeroBridge = ({ className = '' }) => (
   <svg className={className} viewBox="0 0 1440 720" fill="none" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     <defs>

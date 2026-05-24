@@ -1,6 +1,6 @@
 // Magic Bridge — Landing Page
 // ES Module — Vite 빌드용
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   IconWordmark, IconArrowRight, IconBulb, IconCompass, IconGear, IconLayers,
   IconLoop, IconMinus, IconPlus, IconShield, IconTrendingDown, IconCheck, IconX,

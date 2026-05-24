@@ -1,6 +1,6 @@
 // Magic Bridge — App (Dashboard / Curriculum / Lesson / Resources / Community)
 // ES Module — Vite 빌드용
-import { useState as useS, useEffect as useE } from 'react';
+import React, { useState as useS, useEffect as useE } from 'react';
 import {
   IconWordmark, IconArrowRight, IconArrowUpRight, IconBell, IconBook, IconChat,
   IconCheck, IconClock, IconDoc, IconFolder, IconHeadset, IconHome, IconLock,

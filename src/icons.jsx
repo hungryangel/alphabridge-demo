@@ -1,5 +1,6 @@
 // Magic Bridge — line icons (1.5px gold stroke, 24×24 viewBox)
 // ES Module — Vite 빌드용
+import React from 'react';
 const Ic = ({ d, size = 20, stroke = 'currentColor', sw = 1.5, children, viewBox = '0 0 24 24', ...rest }) => (
   <svg width={size} height={size} viewBox={viewBox} fill="none" stroke={stroke} strokeWidth={sw}
        strokeLinecap="round" strokeLinejoin="round" {...rest}>

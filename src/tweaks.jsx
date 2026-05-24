@@ -1,6 +1,6 @@
 // Magic Bridge — Tweaks panel
 // ES Module — Vite 빌드용
-import { useState as useTS, useEffect as useTE } from 'react';
+import React, { useState as useTS, useEffect as useTE } from 'react';
 import { IconX } from './icons.jsx';
 
 const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
